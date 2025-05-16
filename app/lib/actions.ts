@@ -3,6 +3,28 @@ import postgres from 'postgres';
 import { z } from 'zod';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
+import { signIn } from '@/auth';
+import { AuthError } from 'next-auth';
+
+
+export async function authenticate(
+    prevState: string | undefined,
+    fromData: FormData,
+){
+    try {
+        await signIn('credentials', fromData);
+    } catch (error) {
+        if (error instanceof AuthError) {
+            switch (error.type) {
+                case 'CredentialsSignin':
+                    return 'Invalid Credentials';
+                default:
+                    return 'Something went wrong';
+            }
+        }
+        throw error;
+    }
+}
 
 const sql = postgres(process.env.POSTGRES_URL!, {ssl: 'require'});
 const FormSchema = z.object({
@@ -54,7 +76,7 @@ export async function createInvoice(prevState: State, formData: FormData){
         `;        
     } catch (error) {
         return {
-            message: 'Database error: failed to create Invoice.',
+            message: `Database error: failed to create Invoice: ${error}`,
         };
     }
 
@@ -92,7 +114,7 @@ export async function updateInvoice(
     `;        
     } catch (error) {
         return{
-            message: 'Database Error: Failed to update invoice.'
+            message: `Database Error: Failed to update invoice: ${error}`,
         };
     }
 
@@ -110,3 +132,4 @@ export async function deleteInvoice(id: string){
     
     revalidatePath('/dashboard/invoices');
 }
+
