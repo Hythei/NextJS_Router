@@ -52,8 +52,8 @@ export async function fetchLatestInvoices() {
 
 export async function fetchCardData() {
   // Personal addition to see if the dashboard cards'll properly update in deployment
-  const invoiceCountPromise = sql`/* no-cache */ SELECT COUNT(*) from invoices`;
-  
+  // const invoiceCountPromise = sql`/* no-cache */ SELECT COUNT(*) from invoices`;
+
   try {
     // You can probably combine these into a single SQL query
     // However, we are intentionally splitting them to demonstrate
