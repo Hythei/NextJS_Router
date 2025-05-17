@@ -80,6 +80,9 @@ export async function createInvoice(prevState: State, formData: FormData){
         };
     }
 
+    // Personal addition to see if the dashboard cards'll properly update in deployment
+    revalidatePath('/dashboard');
+
     revalidatePath('/dashboard/invoices');
     redirect('/dashboard/invoices');
 }
@@ -118,6 +121,8 @@ export async function updateInvoice(
         };
     }
 
+    // Personal addition to see if the dashboard cards'll properly update in deployment
+    revalidatePath('/dashboard');
 
     revalidatePath('/dashboard/invoices');
     redirect('/dashboard/invoices');
@@ -130,6 +135,9 @@ export async function deleteInvoice(id: string){
         console.error(error);
     }
     
+    // Personal addition to see if the dashboard cards'll properly update in deployment
+    revalidatePath('/dashboard');
+
     revalidatePath('/dashboard/invoices');
 }
 
